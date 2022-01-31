@@ -1,6 +1,6 @@
-ff24578eba72590d646aec03c7436c15 *DESCRIPTION
+ac5448b3c8a737185d4d05f636fb265c *DESCRIPTION
 93eb5c81998c29b1517071f3c234267f *NAMESPACE
-2d4618ca3f9e026e8978dcb36d66d8bf *NEWS.md
+0e586df96513e8bc0c8e5eb4f6b1a71e *NEWS.md
 43a5ae0d48ebf03e164c04dafd2914ff *R/Data.R
 9116aa896e441ea42b4e46e626c7159b *R/generateOutliers.R
 a901152179e7d5587dffd9d2fe3e8cde *R/is.R
@@ -11,12 +11,13 @@ b027371f8dc746c1c2af8f537f5d0117 *R/plot.R
 3838c51e2ba4680763696b4a03605956 *R/print.R
 21a305782d23ef766e7e873e374dc5c8 *R/process_scores.R
 04736dde626ab3ba50443d76b1bc3b88 *R/summary.R
-244e3af3f15bcd5532eea96970a5ae13 *README.md
-63ce27172acfa67f7519ac3f8dc28fe0 *build/vignette.rds
-4fc328c953fa3f2563007ed12e65865f *inst/doc/outRanger.R
-144c5840e8047a852d7760696cc8196a *inst/doc/outRanger.Rmd
-8b82f242a817b57c2f7fa34becfae8a3 *inst/doc/outRanger.html
+7e3cb2bd5be5a22b28f12f365e6f472e *README.md
+67beb577b556af0dc19d9cafe8908e54 *build/vignette.rds
+4fc328c953fa3f2563007ed12e65865f *inst/doc/outForest.R
+1f62791aae1e8b71bf1973957200d087 *inst/doc/outForest.Rmd
+48e225e18514ca3b703493d323e305e2 *inst/doc/outForest.html
 341baec0c8d7bf7c53b0560db8967a38 *man/Data.Rd
+28f304971b81350e4b64f65bdf877274 *man/figures/logo.png
 ce2afce7aa6a4932971eabc481a1cf43 *man/generateOutliers.Rd
 4fed8d44c237d514c39f50b61fa5613a *man/is.outForest.Rd
 2081d3562a943ca9d57c1349d08e6184 *man/outForest.Rd
@@ -27,4 +28,4 @@ adb060c6f43bb9f6d7124b8d587145f4 *man/predict.outForest.Rd
 d262d7bf5e8630513851cb6c720f3570 *man/process_scores.Rd
 07a0dc9683a0b52fef61484c02bf59f6 *man/summary.outForest.Rd
 38963625901ffbb3b57fd9bbe44277f9 *vignettes/biblio.bib
-144c5840e8047a852d7760696cc8196a *vignettes/outRanger.Rmd
+1f62791aae1e8b71bf1973957200d087 *vignettes/outForest.Rmd

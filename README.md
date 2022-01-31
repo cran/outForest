@@ -1,4 +1,6 @@
-# outForest
+# outForest <a href='https://github.com/mayer79/outForest'><img src='man/figures/logo.png' align="right" height="138.5" /></a>
+
+[![CRAN version](http://www.r-pkg.org/badges/version/outForest)](https://cran.r-project.org/package=outForest) [![](https://cranlogs.r-pkg.org/badges/outForest)](https://cran.r-project.org/package=outForest) [![](https://cranlogs.r-pkg.org/badges/grand-total/outForest?color=orange)](https://cran.r-project.org/package=outForest)
 
 `outForest` is a random forest regression based multivariate anomaly detection method. Each numeric variable is regressed onto all other variables using a random forest. If the scaled absolute difference between observed value and out-of-bag prediction is larger than a prespecified threshold, then a value is considered an outlier. After identification of outliers, they can be replaced e.g. by predictive mean matching from the non-outliers.
 
@@ -15,7 +17,7 @@ install.packages("outForest")
 Latest version from github:
 ``` r
 library(devtools)
-install_github("mayer79/outForest", subdir = "release/outforest")
+install_github("mayer79/outForest")
 ```
 
 ## Examples
