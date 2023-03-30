@@ -10,31 +10,43 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="Michael Mayer" />
 
-<meta name="date" content="2022-01-29" />
+<meta name="date" content="2023-03-28" />
 
 <title>Using ‘outForest’</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -52,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -109,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,29 +145,209 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <style type="text/css">
-/* for pandoc --citeproc since 2.11 */
+
 div.csl-bib-body { }
 div.csl-entry {
-  clear: both;
+clear: both;
 }
 .hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+margin-left:2em;
+text-indent:-2em;
 }
 div.csl-left-margin {
-  min-width:2em;
-  float:left;
+min-width:2em;
+float:left;
 }
 div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
+margin-left:2em;
+padding-left:1em;
 }
 div.csl-indent {
-  margin-left: 2em;
+margin-left: 2em;
 }
 </style>
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -162,277 +360,339 @@ div.csl-indent {
 
 
 <h1 class="title toc-ignore">Using ‘outForest’</h1>
-<h4 class="author">Michael Mayer</h4>
-<h4 class="date">2022-01-29</h4>
+<h4 class="date">2023-03-28</h4>
 
 
 
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>The aim of this vignette is to introduce the R package <code>outForest</code> for multivariate outlier detection and replacement.</p>
-<p><code>outForest</code> is a random forest based implementation of the method described in Chapter 7.1.2 (“Regression model based anomaly detection”) of <span class="citation">(<a href="#ref-Chandola2009" role="doc-biblioref">Chandola, Banerjee, and Kumar 2009</a>)</span>. Each numeric variable is regressed onto all other variables using a random forest. If the scaled absolute difference between observed value and out-of-bag prediction is suspiciouly large (e.g. more than three times the RMSE of the out-of-bag predictions), then a value is considered an outlier. After identification of outliers, they can be replaced e.g. by predictive mean matching from the non-outliers.</p>
-<p>The method can be viewed as a multivariate extension of a basic univariate outlier detection method where a value is considered an outlier if it is more than e.g. three times the standard deviation away from its mean. In the multivariate case, instead of comparing a value with the overall mean, rather the difference to the conditional mean is considered. The <code>outForest</code> package estimates this conditional mean by a random forest.</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>{outForest} is a random forest-based implementation of the method
+described in Chapter 7.1.2 (“Regression model based anomaly detection”)
+of <span class="citation">(<a href="#ref-Chandola2009" role="doc-biblioref">Chandola, Banerjee, and Kumar 2009</a>)</span>.
+Each numeric variable is regressed onto all other variables using a
+random forest. If the scaled absolute difference between observed value
+and out-of-bag prediction is suspiciouly large (e.g. more than three
+times the RMSE of the out-of-bag predictions), then a value is
+considered an outlier. After identification of outliers, they can be
+replaced e.g. by predictive mean matching from the non-outliers.</p>
+<p>The method can be viewed as a multivariate extension of a basic
+univariate outlier detection method, in which a value is considered an
+outlier if it deviates from the mean by more than, say, three times the
+standard deviation. In the multivariate case, instead of comparing a
+value with the <em>overall mean</em>, rather the difference to the
+<em>conditional mean</em> is considered. {outForest} estimates this
+conditional mean by a random forest.</p>
 <p>Specificly, the outlier score of the <span class="math inline">\(i\)</span>-th observed value <span class="math inline">\(x_{ij}\)</span> of variable <span class="math inline">\(j\)</span> is defined as <span class="math display">\[
   s_{ij} = \frac{x_{ij} - \text{pred}_{ij}}{\text{rmse}_j},
-\]</span> where <span class="math inline">\(\text{pred}_{ij}\)</span> is is the corresponding out-of-bag prediction of the j-th random forest with RMSE <span class="math inline">\(\text{rmse}_j\)</span>. If <span class="math inline">\(|s_{ij}| &gt; L\)</span> with threshold <span class="math inline">\(L\)</span>, then <span class="math inline">\(x_{ij}\)</span> is considered an outlier.</p>
-<p>Why using random forests for calculating the conditional means? They often work well without parameter tuning, outliers in the input variables are no issue and the out-of-bag mechanism helps to provide fair outlier scores.</p>
-<p><code>outForest</code> utilizes the high-performance random forest implementation <code>ranger</code> <span class="citation">(<a href="#ref-wright2017" role="doc-biblioref">Wright and Ziegler 2017</a>)</span>. Since it does not allow for missing values, any missing value is first being imputed by chained random forests, see <span class="citation">(<a href="#ref-buuren2011" role="doc-biblioref">Buuren and Groothuis-Oudshoorn 2011</a>)</span>.</p>
-<p>In the examples below, we will meet different functions from the <code>outForest</code> package:</p>
+\]</span> where <span class="math inline">\(\text{pred}_{ij}\)</span> is
+is the corresponding out-of-bag prediction of the <span class="math inline">\(j\)</span>th random forest with RMSE <span class="math inline">\(\text{rmse}_j\)</span>. If <span class="math inline">\(|s_{ij}| &gt; L\)</span> with threshold <span class="math inline">\(L\)</span>, then <span class="math inline">\(x_{ij}\)</span> is considered an outlier.</p>
+<p>Why using random forests for calculating the conditional means? They
+often work well without parameter tuning, outliers in the input
+variables are no issue and the out-of-bag mechanism helps to provide
+fair outlier scores.</p>
+<p>{outForest} utilizes the high-performance random forest
+implementation {ranger} <span class="citation">(<a href="#ref-wright2017" role="doc-biblioref">Wright and Ziegler
+2017</a>)</span>. Since it does not allow for missing values, any
+missing value is first being imputed by chained random forests
+implemented in {missRanger}.</p>
+<p>In the examples below, we will meet different functions from the
+{outForest} package:</p>
 <ul>
-<li><p><code>outForest</code>: This is the main function. It identifies and replaces outliers in numeric variables of a data frame.</p></li>
-<li><p><code>print</code>, <code>summary</code> and <code>plot</code>: To inspect outlier information.</p></li>
-<li><p><code>outliers</code> and <code>Data</code>: To extract information on outliers and the data with replaced outliers.</p></li>
-<li><p><code>generateOutliers</code>: To add nasty outliers to a data set.</p></li>
-<li><p><code>predict</code>: To apply a fitted <code>outForest</code> object to fresh data.</p></li>
+<li><p><code>outForest()</code>: This is the main function. It
+identifies and replaces outliers in numeric variables of a data
+frame.</p></li>
+<li><p><code>print()</code>, <code>summary()</code> and
+<code>plot()</code>: To inspect outlier information.</p></li>
+<li><p><code>outliers()</code> and <code>Data()</code>: To extract
+information on outliers and the data with replaced outliers.</p></li>
+<li><p><code>generateOutliers()</code>: To add nasty outliers to a data
+set.</p></li>
+<li><p><code>predict()</code>: To apply a fitted “outForest” object to
+fresh data.</p></li>
 </ul>
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>From CRAN:</p>
-<pre><code>install.packages(&quot;outForest&quot;)</code></pre>
-<p>Latest version from github:</p>
-<pre><code>library(devtools)
-install_github(&quot;mayer79/outForest&quot;)</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># From CRAN</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;outForest&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Development version</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;mayer79/outForest&quot;</span>)</span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2>Examples</h2>
-<p>We first generate a data set with two truely multivariate outliers. Then, we use <code>outForest</code> to hunt them down.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(outForest)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data set with truely multivariate outlier</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, pi, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">cos</span>(t), <span class="at">y =</span> <span class="fu">sin</span>(t) <span class="sc">+</span> <span class="fu">runif</span>(<span class="fu">length</span>(t), <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>dat[<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>), ] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.4</span>))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>We first generate a data set with two multivariate outliers. Then, we
+use <code>outForest()</code> to find them.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(outForest)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data with multivariate outlier</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, pi, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">cos</span>(t), <span class="at">y =</span> <span class="fu">sin</span>(t) <span class="sc">+</span> <span class="fu">runif</span>(<span class="fu">length</span>(t), <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dat[<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>), ] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.4</span>))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s run outForest on that data</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ch <span class="ot">&lt;-</span> <span class="fu">outForest</span>(dat)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<pre><code>#&gt; 
+#&gt; Outlier identification by random forests
+#&gt; 
+#&gt;   Variables to check:        x, y
+#&gt;   Variables used to check:   x, y
+#&gt; 
+#&gt;   Checking: x  y
+
+# What outliers did we find?
+outliers(ch)
+#&gt;   row col observed predicted       rmse     score threshold replacement
+#&gt; 1 100   y      0.4 0.8567112 0.07485516 -6.101265         3   0.9913182
+#&gt; 2 200   y      0.4 0.8244413 0.07485516 -5.670168         3   0.8113720
+
+# Bingo! How does the fixed data set looks like?
+plot(y ~ x, data = Data(ch))</code></pre>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s run outForest on that data</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ch <span class="ot">&lt;-</span> <span class="fu">outForest</span>(dat)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Outlier identification by random forests</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Variables to check:        x, y</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Variables used to check:   x, y</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Checking: x  y</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># What outliers did we find?</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">outliers</span>(ch)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row col observed predicted       rmse     score threshold replacement</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 100   y      0.4 0.8567112 0.07485516 -6.101265         3   0.9913182</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 200   y      0.4 0.8244413 0.07485516 -5.670168         3   0.8113720</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Bingo! How does the fixed data set looks like?</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">Data</span>(ch))</span></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAVFBMVEUAAAAAADoAAGYAOjoAOpAAZrY6AAA6ADo6AGY6Ojo6kNtmAABmADpmZmZmtv+QOgCQ2/+2ZgC2/7a2///bkDrb/9vb////tmb/25D//7b//9v////oPA8/AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAJx0lEQVR4nO2dAX/bJhDFWdd2W7PN8+bNSfj+33O2JOBONn4IIXFO3vutWSyh4/QXHAeirvPUQ7neDlgXAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQUGNA7mnUC1BbcwPx1iZHu80LdjE32NuE0IcAFLqC26AhPTmggYcb/jf+4mN4a1PBkwMSPNzAKeFpReiZAU39yon/fOQUaK3tdE8JKEScwCP8jL/60KbWR+/nA5To+NiZRAwS/S2WW+P8UwFysRf52KF0TheQjSe8jNtbO9oT0HR7oR/52HoSmulEZBOJiX5WRekZAIUUZ+SSAKX2EgNQCkNO9LyJ7xSVNnK00bi8eIoTak5dKIxUanyfzo5/vDjuE8TQnpZ53Lxgc3Ph8UsIISYLXCkgJY4yMoWcYCtH+wISsSYGJHkw5oiqkaYGlI5u5mjXGCTbhYwos0YTh3wVnRSu7RztNgcUEUTeth7H/KzliBmH+vnxYlAcoGeDlmw5XnXDu2mAEye3cbQToBigdXuJcFLGLAupCB5PiBxz8RjasmBTc7e534xTzIxko5qni4FazBoXINoI0NG5b++Hix9/rjM33e4s/sz6WCyVel0s7n1sP060tXBxkQfFrpbr9PW/C6Nv3r+9/FhnTofb2eQrAhCJUMqb/YzVFIBkylTkQLGn5Xo/XLCcf/rLj6jqzM27iE4G02GdN8a7dvqI8wKYSJna3fcSQG8vl551/vKPDz8rzMnplripWRNKN3lzv+mkCEt+ZqvIjzLt3IJuEmMv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" /><!-- --></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of outliers per variable</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ch)</span></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAABDlBMVEUAAAAAADoAAEwAAGYAK2sAOjoAOmYAOpAATIcAZmYAZpAAZrYrAAArACsrKysrK2sra6M6AAA6ADo6AGY6OgA6Ojo6OmY6ZpA6ZrY6kLY6kNtMAABMACtMh75mAABmADpmOgBmOjpmZgBmZmZmkLZmkNtmtrZmtttmtv9rKwBro4dro76HTACHvr6QOgCQZgCQZjqQkDqQkGaQkLaQtpCQttuQtv+Q27aQ2/+jayujvr62ZgC2Zjq2ZpC2kGa225C227a229u22/+2/7a2/9u2//++h0y+o2u+voe+vqO+vr7bkDrbkGbbtmbbtpDb27bb29vb/9vb////tmb/trb/25D/27b//7b//9v////pcJB5AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAIaElEQVR4nO2daXfbRBiFxxiSgtkMoS2mNWFrXSim7AkutA01baMuNMKx9f//CLNIo5EtzXVyZGmc3OdDYo3fvDN6NFtPJVskxItouwGhQ0EACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQHKBU2EGMlf86Hogb+fiO70LPUt7veFuA5i/pwmi7HYPdE/zpL93KzUZM+rUpCK34CgWEgG3pDT/e42CFJdaAOCItE5WCdlc248jVBUC5IBRpCJla8HuuDlnujcTp73xc6BSfTwCyGuHak/W9wXonNdnZf08Mu+6B6l+V7KkLe+PjGJc0W22K1Dh3QfOz2oJO3zPVl07Shvr27FjqcV6RnH+sq/3Jd1XD3IQx6ZmvJye17VglIfy4IMe8IoNJHp6/TdnamqV5H1AXOkDguC8mKvoJK0UV5p3t40c0UrjBkZKQ/jPDoNeT1eKrfnVSWo+6WsvlTQIHkh//C2Sj0ws9WRKjGBR8msr4ojXfyvySaLZO0m3hlibrFThzPEjKDVtKpdJ6rSgW2vivG2QubqpTXIl++cFEOy6my5Pa9KQQ9kXJkgc0l380SdtEdOzenJKmV4ZK6XzTbNfjmC3GKPoJK0suqdR0s9foRaERWqf/XXntaZhtgpLyu351UpaCpDfi+bg7K5OxOkz1JVLAtsF3Xn4qzyqPhGodgjqCStLBfZ7OW69rVCtXeUTWr3TEgvcTLKN5xym7FakEz4tiNI+ygTZM8yHcErTcvWQj0L5G8Uip06lgWVpT3dNyW/FQWpVFWt0GPMVKD87vz8argsyC2351UtyMxfWJB77WyHPl8PKhVUnvb0pz1nFVijFXqM/agLTDXzFUFu+Ro9yCwHNkcsKgS5o7+XN8Zp2hpzkFNHyRxUnnbxg13G1mlFogefUmoWtGySzgW55TajR5DuQmYeGySn40pBzvohN0inQ7M2FUc/WsWcOkxIYRVbTivP5NMTNc7yHoRbYbe/pmJV2WoPsuU2o0+Q6kK91LyiQtDyPshsL4qd225I3DecYqcOvRsp2Qe5ae/nGxZ76rAVKrHucmaOX52k3XK8D0onPdVdZ3JKvPawchXLd9Kn9/rpy6Wm6S3zN8nyG3mxU4feCe88cnbSJWlfqBnoqruTfnwPtsKOPrVa7fzqrvv5KpaWg530tnHWfxGeAQoCUBCAggAXQ9AGoSAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCgdkFiS2hP0PFWQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQYD2Bd29In8cXmlTgo/2Bf3zxvfHz+7cbNWCh/YFPf3s5vGT975r1YKH9gWpMXb45h9tSvARgCA5xu5+2KYDLwEIenrj2xvBjrAQBD278364IywEQceHItwRFoSggNewQAR9EO4IC0LQYcAjLABBT94NeIoOQVDgUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEGAFgVtCa0JumhQEICCABQEoCAABQEoCEBBAAoC1L+Trjthy1AQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBNiYoKg7TebDQd3pG2djghbjQRLtntSdvnE2N8Ti7t+fH9SdvXk2OAdNRK/u5C2wQUGxGNWdvAU2J2gx/krO01vP5gRFu6/H27+IbU7QfDiS8/T2d6GNCZrIJX4x3v5pmjtpAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEu2vnUDgUBKAhAQQB+uEnjgtqMbDVl7QkpqPlICgo5Ze0JKaj5SAoKOWXtCSmo+chtEHTRoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQYC6BMVCdA5KD3yR86H6H5jqR4JmH9vnqbw5nUBvysVYvmcfYvOnTKlJUCxrirPaCgfeyNlH3gbOh/aBM29ON9CXcjGWGaLMnj9lRj2CFvrZwklv9cAbCZ64k1c4e9+b0w30ppz11VO0kYnwp7TUI6hQc+HAG5lEvubFYmDP1pvTDfSnNOGm13hT5tQkSPfrtJWFA29kMvnEnRNWyQX5chbeQSllxBrNzKlHkLko6aUpHHgj50P10QyT6tOxzffmdANhStXf1kqZ0qqgtKj6Ip5dEE7pztGNCTrvEDNF/coPIDjHEAMpYzv8Gh1i552knZaWst4knawKqkoZ5dNTo5P0OZd508Z1hhhak5dMVqWMnE/LaHSZP+9GUTdvnUka7eqcVcyTctZ3y5vcKKpro7ft5qMEIt8evhA5kWuy5yNQ9HmvkdMN9KSMzM1lnYN1UqbwH6sACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQECA8QfpWXf+XAsUNfqNJcILMHU4T310F6hspGiM0Qem9YYuxpw9dakHZN279p+73ic0Nq1qI/DEf3hoKMZr10RCsk8AEFb6qRH170nzYcwSpG+U7B5e5B7nfaWfukYtTIVrQQI9BCjKY6SgTogU5v5siMEHuEDOClsVcckF2ko7VZMwetIqzzDtz0GBVVFOEJshsFPWDXXYVM7bEqDBZN0Vwgswjg2agpfsgXXQrH2LJ5PLug8KDggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoC/A8wKm1qAXgD0wAAAABJRU5ErkJggg==" /><!-- --></p>
-<p>Note that <code>outForest</code> offers a <code>...</code> argument to pass options to its workhorse random forest implementation <code>ranger</code>, e.g. <code>num.trees</code> or <code>mtry</code>. How would we use its “extra trees” variant with 50 trees? As data set, we add a couple of outliers to the famous iris flower data set.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(irisWithOutliers <span class="ot">&lt;-</span> <span class="fu">generateOutliers</span>(iris, <span class="at">p =</span> <span class="fl">0.02</span>))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5      1.40000         0.2  setosa</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0    -13.32449         0.2  setosa</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2      1.30000         0.2  setosa</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1      1.50000         0.2  setosa</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6      1.40000         0.2  setosa</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9      1.70000         0.4  setosa</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, <span class="at">splitrule =</span> <span class="st">&quot;extratrees&quot;</span>, </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">num.trees =</span> <span class="dv">50</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The worst outliers</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">outliers</span>(out))</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  77  Petal.Width   8.617485  1.462865 0.6365155 11.240290         3</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7   2 Petal.Length -13.324488  1.572715 1.5200990 -9.800153         3</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 135  Sepal.Width  -5.061389  3.120949 0.9375457 -8.727402         3</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length  16.880345  6.070454 1.4580339  7.414019         3</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length  -4.004644  6.355322 1.4580339 -7.105436         3</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 136 Petal.Length  -4.054545  5.790103 1.5200990 -6.476321         3</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9         1.5</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.3</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         3.0</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         6.1</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         7.3</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8         6.7</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of outliers</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out)</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following outlier counts have been detected:</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Number of outliers</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length                  3</span></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width                   3</span></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length                  2</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width                   1</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  77  Petal.Width   8.617485  1.462865 0.6365155 11.240290         3</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7   2 Petal.Length -13.324488  1.572715 1.5200990 -9.800153         3</span></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 135  Sepal.Width  -5.061389  3.120949 0.9375457 -8.727402         3</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length  16.880345  6.070454 1.4580339  7.414019         3</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length  -4.004644  6.355322 1.4580339 -7.105436         3</span></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 136 Petal.Length  -4.054545  5.790103 1.5200990 -6.476321         3</span></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9         1.5</span></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.3</span></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         3.0</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         6.1</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         7.3</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8         6.7</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic plot of the number of outliers per variable</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of outliers per variable</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ch)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAABDlBMVEUAAAAAADoAAEwAAGYAK2sAOjoAOmYAOpAATIcAZmYAZpAAZrYrAAArACsrKysrK2sra6M6AAA6ADo6AGY6OgA6Ojo6OmY6ZpA6ZrY6kLY6kNtMAABMACtMh75mAABmADpmOgBmOjpmZgBmZmZmkLZmkNtmtrZmtttmtv9rKwBro4dro76HTACHvr6QOgCQZgCQZjqQkDqQkGaQkLaQtpCQttuQtv+Q27aQ2/+jayujvr62ZgC2Zjq2ZpC2kGa225C227a229u22/+2/7a2/9u2//++h0y+o2u+voe+vqO+vr7bkDrbkGbbtmbbtpDb27bb29vb/9vb////tmb/trb/25D/27b//7b//9v////pcJB5AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKtklEQVR4nO3de2PbVgFAcYVAOgivQFmH2Ux5rRkMU94pKWwNC9vqrWMxSezv/0WQdGXpKn42J5Ks9Pz+aGvV6EryiXSlMS+ZSUDS9Qao3wxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEtKPgE6T5Dj97XqYHG585/7566x5+vwoSd7Z8J5/ns+mo+TBRf7L66z91hZGivarva3YRm8Cyo5ZAwFNktRg7VuuHu8b0Eq9CSg7BTUQ0DjZO9lmlV1/agaEZAGlBzAEFI5l+udBvuDVw2TvyeyLo+TgJH/n/se/SJJHZ9n/bPo8SfbeyQ522slfHif7Z8X6XqVv+davL8KKq4TKxfEY+Vv2P4nOQEtW+8XDdNGjs2p78604WLMVRRGT/Cfj1eN0jLdPqre8CCNVy6P9WtiKTvUnoKKXmwEFD5OQWHhn8efibw/Os88lM//BDa+yl7WAqsVrA1qy2nE1aLW9xZpXbEUoJ31n+nJSvbt4y9ejG8uj/VrYik71JaD9X6bHbmlAg9mX6YF8kh36QZgtnWVLwhvPZpdH2eJxvvi/YW3povQTCO+PLmHx4miM6BIWPrrF1WbbdZENOii3N3vP2q1I13VYjJD+8TsX9bfMhyuXR/u1sBWd6k1AH6XHallA4YfxQXWg94oz/nn4+NOPJH37OPy8l2s7n/8WBRQvXhPQktWmQx+8qG9vcXpZsxXj2vBf/ethnlvxlnKeM18e7dfCVnSqNwGdp4fw78vmQPO59Tyg/IhmH0y6oLwExHPl+Yczrv9FbfGagJasNl2ezGdP5fZu2Ipse4/n05mn4S2Hs2iN6V9Ey6M1LmxFp/oTUHrIvh0FlPeyLKCygmIGsfDRze/l8llI9Re1xdEYNwNattqrx2HJ36LtLVa1aivya1gYIOvv4M9fDW8GFC+P9mthKzrVn4DC/HJzQPHPfnnBuN0ZaGlAy1d79aeH0Sx9i63ILz9/zBeEYa4XAoqXLzkDVVfDLvUooPy+ozzGk2RFQPHso3xqVPvotpgDRWMsmQMtX+30D+WEZJutmOVXoSy5cEM2n0RXAcXLozUubEWnehRQfgoK88zB7Gq0MqDo/mfvyexqGO6t6rOPTXdh0RjhLbW7sJurTT/pn15k17HqDLR5K8rHo2HgbLDFM1C5PFrjwlZ0qk8BZaegw+InN7MioPKRTPGoJDxeqV88ygcy8V9Ei6Mx8qcxS54Dxat9fmM+stVWZCvOT1lhDr44iY6Xr3oO1PUUqFcBZUc8O29fplPWRx+vvAurnkRfPT0q/njjo8sfOf9mdvMvqsXRGPkj34MX0ZPoJav9MpsBvR0/if7k6catKC9D2d3WwV/j+/rqLqxYvvgkulptp/oRUN+87j+R6zEDaoIBCTEgIQYkbceAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQkCYCStR/nQb0Un1nQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkZAcD+vCt9Jdnb7V7HHRLOxjQf77x+5eff/BeywdCt7ODAX32s/defvq937V8IHQ7OxhQdg179s1/tHscdEu7GFB6Dfvwh+0eBt3WLgb02bu/fdcrWE/sYkCff/B9r2B9sYsBvXyWeAXri50MyHuw/tjNgH7gFawvdjKgZ17BemMHA/r0u06h+2MHA1KfGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEK6DUj912VAeoMYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQ08v9IbGCd2lEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQlpL6Dx/vnsejhoYDx1qL2ApqPBbPzgooHx1KEWL2GT/X///KSB4dSlNudAp8lhA6OpU20GNEmOGxhNnWoxoOnoV+k8WvdLiwGNH3w98ibsvmkvoOvhcTqP9hR0z7QX0Gl6Cz8dOY2+Z3wSLcSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQnxwxZiQEIMSIgBCTEgIQYkxICENPIcSP3XaUANrNMBd3RAA3JANKABOSAa0IAcEA1oQA6IBjQgB0QDGpADogENyAHRgAbkgGhA/1GGEAMSYkBCDEiIAQkxICEGJMSAhBiQEAMSYkBCDEiIAQm5w4AmSbJ3svRFQ+IxrofZv4ty2PCIs8sfny8bvY0B29jD6SgdYjB/tdUe3l1Ak3SwyXzA2ouG1Ma4/FHzH2b2Ie7PP8829rA2YAt7OB2lOzSeR7rdHt5ZQNNRVu7p4eKLhtTHmJQHukHpj+R8mDb2sDZgG3t4eXSc/joOA225h3cWUG3w2ouG1McYN371yj7OQfkptrGHtQFb2cMwajjrbLmHdxdQfoYt9rf2oiH1MU5/El+9G1MF1MIe1gZsaw/TgV7rM7yzgEK3Rb21Fw2pjXE9fHCR7nrjx7c8nm3sYW3AtvYwO+2F37fbw3sSULGovRNC6wEtfdnEgPEcus2AOr6EhUX5ZbtJHV7CwrBN7+GkvEq2fQnreBIdFjV+p9vuJHq2GFDDeziuZlltT6K7vY0Pe9viCaGd2/iFYhvew3FSneDavo3v+EFivqMtTqJbepAY34U1v4eXR/HqW36QmOWbP/mejg6rF42qDXia3uQ2PQMqPs/29rA2YPN7OA5fTrZ38hp76D9MFWJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAEJMSAhBiTEgIQYkBADEmJAQgxIiAFtkn/1bfbtYKtNmv+X8neWAW0QvnHpdN23DFwPDUgrFF8JNh2tOQcZkFYaF+H8L/uankn4ntQ8mPSX6+H7wyQ5vjzadIm7zwxorfBFOYVJcpx2cxgFlH2x+96JZyCtcj2svrMrfOfbpAgmD2iQX+MMSKvEAYXp0DyYPKDo9zeVAa0VX8JCQDfDMSCtM59ET7LJsmegRQa0XnQbH82BBoshvakMaIP8QWL+H9Iq78JCTclxbTL9pjKgTfL/UmC4kBXPgfJF71eXsNmpz4Gk2zEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSIgBCTEgIQYkxICEGJAQAxJiQEIMSMj/AcNwmucfyt05AAAAAElFTkSuQmCC" style="display: block; margin: auto;" /></p>
+<p>Note that <code>outForest()</code> offers a <code>...</code> argument
+to pass options to its workhorse random forest implementation
+<code>ranger()</code>, e.g. <code>num.trees</code> or <code>mtry</code>.
+How would we use its “extra trees” variant with 50 trees? As data set,
+we add a couple of outliers to the famous iris flower data set.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(irisWithOutliers <span class="ot">&lt;-</span> <span class="fu">generateOutliers</span>(iris, <span class="at">p =</span> <span class="fl">0.02</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5      1.40000         0.2  setosa</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0    -13.32449         0.2  setosa</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2      1.30000         0.2  setosa</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1      1.50000         0.2  setosa</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6      1.40000         0.2  setosa</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9      1.70000         0.4  setosa</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  irisWithOutliers, <span class="at">splitrule =</span> <span class="st">&quot;extratrees&quot;</span>, <span class="at">num.trees =</span> <span class="dv">50</span>, <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The worst outliers</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">outliers</span>(out))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  77  Petal.Width   8.617485  1.462865 0.6365155 11.240290         3</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7   2 Petal.Length -13.324488  1.572715 1.5200990 -9.800153         3</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 135  Sepal.Width  -5.061389  3.120949 0.9375457 -8.727402         3</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length  16.880345  6.070454 1.4580339  7.414019         3</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length  -4.004644  6.355322 1.4580339 -7.105436         3</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 136 Petal.Length  -4.054545  5.790103 1.5200990 -6.476321         3</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9         1.5</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.3</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         3.0</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         6.1</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         7.3</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8         6.7</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of outliers</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following outlier counts have been detected:</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Number of outliers</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length                  3</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width                   3</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length                  2</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width                   1</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  77  Petal.Width   8.617485  1.462865 0.6365155 11.240290         3</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7   2 Petal.Length -13.324488  1.572715 1.5200990 -9.800153         3</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 135  Sepal.Width  -5.061389  3.120949 0.9375457 -8.727402         3</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length  16.880345  6.070454 1.4580339  7.414019         3</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length  -4.004644  6.355322 1.4580339 -7.105436         3</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 136 Petal.Length  -4.054545  5.790103 1.5200990 -6.476321         3</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9         1.5</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.3</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         3.0</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         6.1</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         7.3</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8         6.7</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic plot of the number of outliers per variable</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAABJlBMVEUAAAAAACsAADoAAEwAAGYAK0wAK2sAOjoAOmYAOpAATGsATIcAZmYAZpAAZrYrAAArACsrKysra6M6AAA6ADo6AGY6OgA6Ojo6OmY6ZpA6ZrY6kLY6kNtMAABMACtMKwBMTExMa2tMh4dMh75mAABmOgBmOjpmZgBmkLZmkNtmtrZmtttmtv9rKwBra0xrh2tro76HTACHh0yHo2uHvr6QOgCQZgCQZjqQkDqQkGaQkLaQtpCQttuQtv+Q27aQ2/+jayujvoejvqOjvr62ZgC2Zjq2ZpC2kGa225C227a229u22/+2/9u2//++h0y+o2u+voe+vqO+vr7bkDrbkGbbtmbbtpDb27bb29vb/9vb////tmb/trb/25D/27b//7b//9v///+chGQQAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAP8ElEQVR4nO2dC3sTxxlGF0NcErfgmJYmqZ2kseklgQalpekdJ5i2CUEGKZcW1WD9/z/RuexlVhrJkt+Vdlac8zxY1mj87WjmaGZ2leyXjQEEsrYbAN0GgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUCiGwKdZNld8/DqKLtxYc1rT5eJfP74Vpa9d0Gdfz4dnz/I3nzhfiwT/dJMHSl4X+trxSJ0RiDbZysQaJQZ9udWeXnnGgLNpDMC2SloBQINs62Hi4Rse9QQSMIKZDrQC+T70vy+7wq+v51tfTL+9lZ2/aGree2rX2XZu0/sn50/zrKt92xnG0/+eie79iSP972p8qPfvPCBK4XK4vAYrsq1b4IZKBL229um6N0nVXtdK67PaUVuxMh9Mr6/Y47xzsOqytf+SFV58L6mWtEq3REo92VSIM/tzCvma+a/569ef2rHxVJ8cP0z+7QmUFU8V6BI2GF10Kq9eeQZrfDmmJrm6aiqnVf574OJ8uB9TbWiVboi0LVfm76LCrQ//s505Ce26/f9bumJLfEVn4zPbtnioSv+j49miswI+PrBEhYWB8cIljA/dNNhbbte2IPul+21dea2wsS6kR/B/PqTF/UqxeHK8uB9TbWiVToj0L9NX8UE8h/GN6uO3spn/Kd++M2QmOpD/3kvoz0tHgKBwuI5AkXCmkNf/7re3nx6mdOKYe3wP/zrttMtr1Luc4ry4H1NtaJVOiPQU9OF/4jtgYq9dSGQ61E7MKagXALCvXIxOMP6C7XiOQJFwpryrNg9le29oBW2vXeL7cznvsqNcRDRvBCUBxGnWtEq3RHIdNmPA4GcLzGBSgvyHcTU0BXncm4XUr1QKw6OMSlQLOzLO77k70F781CzWuHWMH8A69/1v/xwNClQWB68r6lWtEp3BPL7y4sFCj/75YJxuRkoKlA87Ms/3w526Qu0wi0/f3IF/jCvpgQKyyMzULUatkmHBHLnHWUfj7IZAoW7j/KqUW3oFtgDBceI7IHiYc//WG5IFmnF2K1CVjl/QlZsoiuBwvIg4lQrWqVDArkpyO8z98cvH8wUKDj/2fpk/PLIn1vVdx8XnYUFx/BVamdhk2HNSP/ihV3Hqhno4laUl0f9ge3BpmegsjyIONWKVumSQHYKupF/ci0zBCovyeSXSvzllfriUV6QCV8IioNjuKsxketAYdjHE/uRhVphA7spy+/BpzfRYfms60Btb4E6JZDtcTtvn5kt67tfzTwLq65Ev/z8Vv7rxNC5S86/HU++UBUHx3CXfK9/HVyJjoT9zu6A3gmvRH/z+YWtKJche7Z1/W/heX11FpaXT1+JrsK2SjcE6hrLfiPXYRBoFSAQSCAQSCAQwGIgEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEisQqAsUVbwVmElAg2SBIFWAQKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBBAKBxDoE6vn/HGcnLOsfVr8/O3BPetuPzM/jbM/8fH5vJy+1da/ct/WrAgRKh7UI5Mx4duAeas7Unhxf/YOt/KGt9uxgL5Dtyn1bBYFSZH0CuYlknkCnN83Ds/c/3TXVTnerugiUMmsUyAlybNayPfNrlplCu7YdlgK5Wae//eW9Qzcb+VJT/8rvrnxq639x8Mubrj4CJcSaZ6Bj8+/05p53pmd2RbagmFrc8x33YP75KmZZ62fFDJQHQKCEWOceaCff2vT99PLs/ft+WioE6m8/em6mn/zBlrpJa9ArBNrLpzEESoc1noXtFdsgI0HpjF2Tiidm42OlMg92C2RL+25fHe6BhI0QAq2CNS5h3heHF8jsb67+PpiBzLxjZp/iwZYeI1DqrFmgYgdTrk/hEjbo7R3bi0W9HfvADNQJ1itQOfylHf1gCRv037JnYIP+Gx8cBo7ZjTMCpcp6BfInUW5TvJdPPtleJcXp27t+j2Rr+VXOXoTOfH0ESpE1C+SuA9mZp5dtP7LXeO77U6zn9+za9fyeq+kfwutA9239LxAoQfgyFSQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCS4Uz1I0KsggUAggUAggUAggUAggUAggUAg8TpdB0qTFQzAOnmNrkSnCQJFYrY9KF0CgSIx2x6ULoFAkZhtD0qXQKBIzLYHpUsgUCRm24PSJRAoErPtQekSCBSJ2fagdAkEisRse1C6BAJFYrY9KF0CgSIx2x6ULoFAkZhtD0qXQKBIzLYHpUsgUCRm24PSJRAoEnOijxZMOFe7m+sMGsg7lxgIFIk50UcLJpxbQKAm0oYlBgJFYk700YIJ5xCoiySUcC4QyNcyL3x04FPM9ZrLO5cYCBSJOdFHCyecKwSqauV/0mTeucRAoEjMiT5aNOFcIVBQa8/VaDTvXGIgUCTmRB8tmnCuEKhey/xoNOtTYiBQJOZEHy2acK4UqFbL/Gg071xiIFAk5kQfLZpwrj4D5bWYgdImpYRz1R4oqGV/NJp3LjEQKBJzoo8WTThXOwsr9szu1eosTM87lxgIFIk50UeLJpyrNtt5rcoV89LVz0xJA3nnEgOBIjFX09V+J7RpIFAkZtOd7PZA/urQxoFAkZiN97I7sd+URasOAkVitj0oXQKBIjHbHpQugUCRmG0PSpdAoEjMtgelSyBQJGbbg9IlECgSs+1B6RIIFInZ9qB0CQSKxGx7ULoEAkVitj0oXQKBIjHbHpQugUCRmG0PSpdAoEjMtgelSyBQJCYswQoGYJ10vf3QMggEEggEEggEEggEEggEEggEElwHgiitCtT21V2QQSCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQSEugZweZv7nvHPIb9/pbAh/be/0Ont/bqW7na29fv3n5CpMlKYH6WZ5sZ16LczN8Wozeh9aj2n1Zw0QHsHKSEqjnsqW6e4nPJjfD39H3/U93bSqo3UA5BForKQlUM+c4c7eiP9212Qf3bEk9baGbdfrbX947dLORLz3e2HyFyZKSQGYJKw0qchGe3jQSuKVtKm2hfb7jHno7eZ6Dzc1XmCxJCeRSpLq9TZmL0EpkRNl+NJW2sL/96LmZfvKHMi3UhuYrTJa0BBrYdSyzp1FFLkKvQJ4YrJa20Gx8rFTmwW6ByrRQG5otLFmSE2jgVqIyF6HfH7s0vBNpC828Y2af4sGWbnK+wmRJSaBiwTEKlLkIS4Gm0hYOenvHdsvU27EPzEAtkZJAxVlYvzipGgwGfg/U2340lbZw0H/rnlve3vjgMEiNuaH5CpMlJYGMH/ayYN9lkstzEZ7etDui7HA6beHg9O1dv1GyVX1yXld3I/MVJktSAvmvMvzqdey/1Di9WVzOOZ5IW2gmLPdthn8IrwPd38B8hcmSlkDTcCKeOAgEEggEEqkLBImDQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCDRrkDQfdoUCF4jEAgkEAgkEAgkEAgkEAgkEAgkuA4EUVoVqO3LqCCDQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCBQCCRlkBLZCzMUxbOhcSFqycpgZbJWLiAQOSdWwNJCbRMxkIESoOUBFoqY2EgUF712cFHB/6m9j0SF66NlARaMmNhIVBRtcxRSOLCNZKUQEtlLCwEKqsWOQpJXLhO0hJosETGwkKgsmqRn4e0YeskOYEGi2YsLAUqqhaukLhwnaQk0HIZC+sz0GAwYAZqg5QEWi5jYbUHyqsWrpC4cJ2kJNByGQtrZ2HFntm9Wp2Fkbhw5SQl0FIZC3t+67NXVq1cMS9d/cyUkLhw9aQl0DSXPgPvX/CVGjTDBgrk/sRfHYKVs4EC+RN7Fq31kLpAkDgIBBIIBBIIBBIIBBIIBBIIBBIIBBIIBBIIBBIIBBIIBBJkLASNNgWC1wgEAgkEAgkEAgkEAgkEAgkEAgmuA0GUVgVKMlSizer6O0SgzQmFQCsNlWizuv4OEWhzQiHQSkMl2qyuv0ME2pxQCLTSUIk2q+vvEIE2JxQCrTRUos3q+jvkqwyQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQaFCgUZZtPYw+kUK9OrL/l8kNoWFnP3vaTLPCUFqzzh+YP95vplW1WGJvDZcew+YEGpmDjYoD1p5ooc5+qoz42PbptWLUtWbVQknNOn9gGjEsxllrVT2W1ltD8/aWHMPGBDp/YD8EJzemn2ihxqNyzC6H+RwVEbRm1UJpzTq7dXfsh0tvVS2W1qxXR/u2OUuNYWMC1d5H/U1JocZDZfWyg75fdqrWrFootVkunv94i62qxWqgWYVACzarOYHc3Jl3cO2JFmp88vNwu3AZKoGkZtVCNdCs8UkTnVWP1UCzhrmKCzarMYH8RyD/INSeaKFeHb35wvSL0idlJ2jNqoVqoln5QOutqmLJzRqV+i3YrOQFyouUz+cqBNKbNQr30KJAo/p5l9Rb5w+sg+sXaGVLmC9yC/IlWckSpjZrVC40DbRqYtGSeqvcmq15CVvZJtoXKWenTW2ix9MCXbpZw2rM5VYNJzc92rl8rt+6N9GrOo3376OZJUw9jZ9y8dLNGmbVHKG2KoylNav21+s+jV/ZhUT3FprZRMsXEsOzMKVZZ7fCP9RaVY+l9daJ2f54cRZuVoNfZeSXwf11hKF0db4W6sScmCpruh/1JppVC6U0a+jvArb1sIFWTcTSeiv/6yWaxZepIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAIIFAF+HuouvvuTSLkfS/7ncbBLoAf/Omk3l3GXh1hEAwg/xuS8V936IgEMxkmIvzP3tfoJG/A6oTxvx4dfTxUZbdPbt10RK3ySDQXIqbJjtG2V3jzY1AIHuP+K2HzEAwC3fv9hx/665RLowTaN+tcQgEswgF8tuhQhgnUPD4uoJAcwmXMC/QpDgIBPMoNtEju1lmBpoGgeYTnMYHe6D9aZFeVxDoAtyFRJeTqzwL8zZld2ub6dcVBLoIlwMwTx+RZ8KxRR9XS9j4hOtAAJcDgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUACgUDi/8kV7dtoAC+yAAAAAElFTkSuQmCC" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic plot of the scores of the outliers per variable</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out, <span class="at">what =</span> <span class="st">&quot;scores&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic plot of the scores of the outliers per variable</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out, <span class="at">what =</span> <span class="st">&quot;scores&quot;</span>)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The fixed data</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">Data</span>(out))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.3         0.2  setosa</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
-<p>Further note that <code>outForest</code> does not rely on <code>tidyverse</code> but you can embed it into a <code>dplyr</code> pipeline (without <code>group_by</code>). Make sure to set <code>verbose = 0</code> in order to prevent messages flooding your screen.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>irisWithOutliers <span class="sc">%&gt;%</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">outForest</span>(<span class="at">verbose =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Data</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.5         0.2  setosa</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The fixed data</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">Data</span>(out))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.3         0.2  setosa</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
+</div>
+<div id="pipe" class="section level2">
+<h2>Pipe</h2>
+<p><code>outForest()</code> can be combined with the pipe:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>irisWithOutliers <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">outForest</span>(<span class="at">verbose =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Data</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
 </div>
 <div id="out-of-sample-application" class="section level2">
 <h2>Out-of-sample application</h2>
-<p>Once an <code>outForest</code> object is fitted with option <code>allow_predictions = TRUE</code>, it can be used to find and replace outliers in new data without refitting. Note that random forests can be huge, so use this option with care. Further note that currently, missing values in the new data are only allowed in one single variable to be checked.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(iris, <span class="at">allow_predictions =</span> <span class="cn">TRUE</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>iris1 <span class="ot">&lt;-</span> iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>iris1<span class="sc">$</span>Sepal.Length[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(out, <span class="at">newdata =</span> iris1)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">outliers</span>(pred)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col observed predicted      rmse     score threshold replacement</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   1 Sepal.Length       -1  5.009533 0.3684992 -16.30813         3         5.8</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">Data</span>(pred)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.8         3.5          1.4         0.2  setosa</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.4         0.2  setosa</span></span></code></pre></div>
+<p>Once an “outForest” object is fitted with option
+<code>allow_predictions = TRUE</code>, it can be used to find and
+replace outliers in new data without refitting. Note that random forests
+can be huge, so use this option with care. Further note that currently,
+missing values in the new data are only allowed in one single variable
+to be checked.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(iris, <span class="at">allow_predictions =</span> <span class="cn">TRUE</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>iris1 <span class="ot">&lt;-</span> iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>iris1<span class="sc">$</span>Sepal.Length[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(out, <span class="at">newdata =</span> iris1)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">outliers</span>(pred)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col observed predicted     rmse     score threshold replacement</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   1 Sepal.Length       -1  5.011421 0.369207 -16.28198         3         5.2</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">Data</span>(pred)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.2         3.5          1.4         0.2  setosa</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.4         0.2  setosa</span></span></code></pre></div>
 </div>
 <div id="the-formula-interface" class="section level2">
 <h2>The formula interface</h2>
-<p>By default <code>outForest</code> uses all columns in the data set to check all numeric columns with missings. To override this behaviour, you can use its formula interface: The left hand side specifies the variables to be checked (variable names separated by a <code>+</code>), while the right hand side lists the variables used for checking.</p>
-<p>So if you e.g. want to check only variable <code>Sepal.Length</code> based on <code>Species</code>, then use this syntax.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, Sepal.Length <span class="sc">~</span> Species, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<p>By default, <code>outForest()</code> uses all columns in the data set
+to check all numeric columns with missings. To override this behaviour,
+you can use its formula interface: The left hand side specifies the
+variables to be checked (variable names separated by a <code>+</code>),
+while the right hand side lists the variables used for checking.</p>
+<p>So if you e.g. want to check only variable <code>Sepal.Length</code>
+based on <code>Species</code>, then use this syntax.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, Sepal.Length <span class="sc">~</span> Species, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following outlier counts have been detected:</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Number of outliers</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length                  3</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col  observed predicted     rmse     score threshold replacement</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length 16.880345  5.928826 1.490069  7.349674         3         5.9</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length -4.004644  6.752837 1.490069 -7.219453         3         6.4</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 135 Sepal.Length 13.663652  6.381728 1.490069  4.886972         3         7.4</span></span></code></pre></div>
+<p>If you want to prevent <code>outForest()</code> to identify and
+replace outliers in the response variable of a subsequent model,
+<code>Sepal.Length</code> say, subtract that variable from the left hand
+side.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, . <span class="sc">-</span> Sepal.Length <span class="sc">~</span> ., <span class="at">verbose =</span> <span class="dv">0</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following outlier counts have been detected:</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Number of outliers</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length                  3</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width                   4</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length                  2</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width                   1</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col  observed predicted    rmse     score threshold replacement</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  66 Sepal.Length 16.880345  5.923771 1.49106  7.348177         3         6.2</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 127 Sepal.Length -4.004644  6.745993 1.49106 -7.210062         3         5.9</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 135 Sepal.Length 13.663652  6.358692 1.49106  4.899171         3         7.7</span></span></code></pre></div>
-<p>If you want to prevent <code>outForest</code> to identify and replace outliers in the response variable of a subsequent model, <code>Sepal.Length</code> say, subtract that variable from the left hand side.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, . <span class="sc">-</span> Sepal.Length <span class="sc">~</span> ., <span class="at">verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following outlier counts have been detected:</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Number of outliers</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width                   4</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length                  2</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width                   1</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  77  Petal.Width   8.617485  1.565126 0.6429529 10.968703         3</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5   2 Petal.Length -13.324488  1.446070 1.5599565 -9.468570         3</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 135  Sepal.Width  -5.061389  3.245469 0.9814244 -8.464083         3</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 136 Petal.Length  -4.054545  6.009261 1.5599565 -6.451338         3</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 117  Sepal.Width   8.720982  2.986622 0.9814244  5.842895         3</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  66  Sepal.Width   3.100000 -1.177281 0.9814244  4.358238         3</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.5</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5         1.9</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4         3.2</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         6.0</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3         3.2</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         2.4</span></span></code></pre></div>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; These are the worst outliers:</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed  predicted      rmse     score threshold</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  77  Petal.Width   8.617485  1.5489019 0.6485071 10.899777         3</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5   2 Petal.Length -13.324488  1.4629804 1.5531209 -9.521131         3</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 135  Sepal.Width  -5.061389  3.2467161 0.9712182 -8.554314         3</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 136 Petal.Length  -4.054545  6.0022195 1.5531209 -6.475198         3</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 117  Sepal.Width   8.720982  2.9949163 0.9712182  5.895756         3</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  66  Sepal.Width   3.100000 -0.8153869 0.9712182  4.031418         3</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7         1.5</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5         1.4</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4         2.8</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6         5.9</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3         2.9</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         2.4</span></span></code></pre></div>
 </div>
 <div id="too-many-values-are-identified-as-outliers.-crap" class="section level2">
 <h2>Too many values are identified as outliers. Crap!</h2>
-<p>For large data sets, just by chance, many values can surpass the default threshold of 3. To reduce the number of outliers, the threshold can be increased. Alternatively, the number of outliers can be limited by the two arguments <code>max_n_outliers</code> and <code>max_prop_outliers</code>. E.g. if at most three outliers are to be identified, set <code>max_n_outliers = 3</code>. If at most 1% of the values are to be declared as outliers, set <code>max_prop_outliers = 0.01</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">outliers</span>(<span class="fu">outForest</span>(irisWithOutliers, <span class="at">max_n_outliers =</span> <span class="dv">3</span>, <span class="at">verbose =</span> <span class="dv">0</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  77  Petal.Width   8.617485  1.581034 0.6437836 10.929839  7.594244</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   2 Petal.Length -13.324488  1.468350 1.5667295 -9.441858  7.594244</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 135  Sepal.Width  -5.061389  3.239251 0.9738046 -8.523928  7.594244</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3         1.2</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         1.9</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         3.6</span></span></code></pre></div>
+<p>For large data sets, just by chance, many values can surpass the
+default threshold of 3. To reduce the number of outliers, the threshold
+can be increased. Alternatively, the number of outliers can be limited
+by the two arguments <code>max_n_outliers</code> and
+<code>max_prop_outliers</code>. E.g. if at most three outliers are to be
+identified, set <code>max_n_outliers = 3</code>. If at most 1% of the
+values are to be declared as outliers, set
+<code>max_prop_outliers = 0.01</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">outliers</span>(<span class="fu">outForest</span>(irisWithOutliers, <span class="at">max_n_outliers =</span> <span class="dv">3</span>, <span class="at">verbose =</span> <span class="dv">0</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row          col   observed predicted      rmse     score threshold</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  77  Petal.Width   8.617485  1.575285 0.6447998 10.921528  7.501523</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   2 Petal.Length -13.324488  1.451632 1.5567481 -9.491657  7.501523</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 135  Sepal.Width  -5.061389  3.219084 0.9663933 -8.568430  7.501523</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   replacement</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3         1.5</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2         1.4</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1         3.1</span></span></code></pre></div>
 </div>
 <div id="i-dont-want-outliers-to-be-replaced" class="section level2">
 <h2>I don’t want outliers to be replaced!</h2>
-<p>By default <code>outForest</code> replaces outliers by predictive mean matching on the out-of-bag predictions. Alternatively, you can set the <code>replace</code> argument to a different value:</p>
+<p>By default <code>outForest()</code> replaces outliers by predictive
+mean matching on the out-of-bag predictions. Alternatively, you can set
+the <code>replace</code> argument to a different value:</p>
 <ul>
-<li><p>“no”: Outliers are not replaced.</p></li>
-<li><p>“predicted”: Outliers are replaced by the out-of-bag predictions (without predictive mean matching).</p></li>
-<li><p>“NA”: Outliers are replaced by missing values.</p></li>
+<li><p><code>&quot;no&quot;</code>: Outliers are not replaced.</p></li>
+<li><p><code>&quot;predicted&quot;</code>: Outliers are replaced by the out-of-bag
+predictions (without predictive mean matching).</p></li>
+<li><p><code>&quot;NA&quot;</code>: Outliers are replaced by missing
+values.</p></li>
 </ul>
 <p>So if you would like to replace outliers by NAs, write:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, <span class="at">replace =</span> <span class="st">&quot;NA&quot;</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">Data</span>(out))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0           NA         0.2  setosa</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">outForest</span>(irisWithOutliers, <span class="at">replace =</span> <span class="st">&quot;NA&quot;</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">Data</span>(out))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0           NA         0.2  setosa</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
 </div>
 <div id="the-algorithm-takes-too-much-time.-what-can-i-do" class="section level2">
 <h2>The algorithm takes too much time. What can I do?</h2>
-<p><code>outForest</code> is based on fitting one random forest for each numeric variable. Since the underlying random forest implementation <code>ranger</code> uses 500 trees per default, a huge number of trees might be calculated. For larger data sets, the overall process can take very long.</p>
+<p><code>outForest()</code> is based on fitting one random forest for
+each numeric variable. Since the underlying random forest implementation
+<code>ranger()</code> uses 500 trees per default, a huge number of trees
+might be calculated. For larger data sets, the overall process can take
+very long.</p>
 <p>Here are tweaks to make things faster:</p>
 <ul>
-<li><p>Use less trees, e.g. by setting <code>num.trees = 50</code>. Don’t use a too low value because this can lead to missing out-of-bag predictions.</p></li>
-<li><p>Use smaller number of variables to be considered in a split, e.g. <code>mtry = 2</code>.</p></li>
-<li><p>Use smaller bootstrap samples by setting e.g. <code>sample.fraction = 0.1</code>.</p></li>
+<li><p>Use less trees, e.g. by setting <code>num.trees = 50</code>.
+Don’t use a too low value because this can lead to missing out-of-bag
+predictions.</p></li>
+<li><p>Use smaller number of variables to be considered in a split,
+e.g. <code>mtry = 2</code>.</p></li>
+<li><p>Use smaller bootstrap samples by setting
+e.g. <code>sample.fraction = 0.1</code>.</p></li>
 <li><p>Use a low tree depth <code>max.depth = 6</code>.</p></li>
-<li><p>Use large leafs, e.g. <code>min.node.size = 10000</code>.</p></li>
+<li><p>Use large leafs,
+e.g. <code>min.node.size = 10000</code>.</p></li>
 </ul>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-buuren2011" class="csl-entry">
-Buuren, Stef van, and Karin Groothuis-Oudshoorn. 2011. <span>“Mice: Multivariate Imputation by Chained Equations in r.”</span> <em>Journal of Statistical Software, Articles</em> 45 (3): 1–67. <a href="https://doi.org/10.18637/jss.v045.i03">https://doi.org/10.18637/jss.v045.i03</a>.
-</div>
 <div id="ref-Chandola2009" class="csl-entry">
-Chandola, Varun, Arindam Banerjee, and Vipin Kumar. 2009. <span>“Anomaly Detection: A Survey.”</span> <em>ACM Comput. Surv.</em> 41 (3): 15:1–58. <a href="https://doi.org/10.1145/1541880.1541882">https://doi.org/10.1145/1541880.1541882</a>.
+Chandola, Varun, Arindam Banerjee, and Vipin Kumar. 2009. <span>“Anomaly
+Detection: A Survey.”</span> <em>ACM Comput. Surv.</em> 41 (3): 15:1–58.
+<a href="https://doi.org/10.1145/1541880.1541882">https://doi.org/10.1145/1541880.1541882</a>.
 </div>
 <div id="ref-wright2017" class="csl-entry">
-Wright, Marvin, and Andreas Ziegler. 2017. <span>“Ranger: A Fast Implementation of Random Forests for High Dimensional Data in c++ and r.”</span> <em>Journal of Statistical Software, Articles</em> 77 (1): 1–17. <a href="https://doi.org/10.18637/jss.v077.i01">https://doi.org/10.18637/jss.v077.i01</a>.
+Wright, Marvin, and Andreas Ziegler. 2017. <span>“Ranger: A Fast
+Implementation of Random Forests for High Dimensional Data in c++ and
+r.”</span> <em>Journal of Statistical Software, Articles</em> 77 (1):
+1–17. <a href="https://doi.org/10.18637/jss.v077.i01">https://doi.org/10.18637/jss.v077.i01</a>.
 </div>
 </div>
 </div>

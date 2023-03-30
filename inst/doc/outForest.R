@@ -3,13 +3,16 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  fig.width = 6, 
+  fig.height = 4,
+  fig.align = "center"
 )
 
 ## -----------------------------------------------------------------------------
 library(outForest)
 
-# Create data set with truely multivariate outlier
+# Create data with multivariate outlier
 set.seed(3)
 t <- seq(0, pi, by = 0.01)
 dat <- data.frame(x = cos(t), y = sin(t) + runif(length(t), -0.1, 0.1))
@@ -31,8 +34,9 @@ plot(ch)
 
 ## -----------------------------------------------------------------------------
 head(irisWithOutliers <- generateOutliers(iris, p = 0.02))
-out <- outForest(irisWithOutliers, splitrule = "extratrees", 
-                 num.trees = 50, verbose = 0)
+out <- outForest(
+  irisWithOutliers, splitrule = "extratrees", num.trees = 50, verbose = 0
+)
 
 # The worst outliers
 head(outliers(out))
@@ -48,15 +52,6 @@ plot(out, what = "scores")
 
 # The fixed data
 head(Data(out))
-
-## -----------------------------------------------------------------------------
-library(dplyr)
-
-irisWithOutliers %>% 
-  outForest(verbose = 0) %>%
-  Data() %>% 
-  head()
-  
 
 ## -----------------------------------------------------------------------------
 out <- outForest(iris, allow_predictions = TRUE, verbose = 0)
