@@ -2,7 +2,7 @@
 % Please edit documentation in R/outForest.R
 \name{outForest}
 \alias{outForest}
-\title{Multivariate Outlier Detection and Replacement by Random Forest Predictions}
+\title{Multivariate Outlier Detection and Replacement}
 \usage{
 outForest(
   data,
@@ -24,16 +24,16 @@ outForest(
 \arguments{
 \item{data}{A \code{data.frame} to be assessed for numeric outliers.}
 
-\item{formula}{A two-sided formula specifying variables to be checked (left hand side)
-and variables used to check (right hand side). Defaults to . ~ ., i.e. use all
-variables to check all (numeric) variables.}
+\item{formula}{A two-sided formula specifying variables to be checked
+(left hand side) and variables used to check (right hand side).
+Defaults to \code{. ~ .}, i.e., use all variables to check all (numeric) variables.}
 
-\item{replace}{Should outliers be replaced by predicting mean matching on the OOB
-predictions ("pmm", the default), by OOB predictions ("predictions"), by \code{NA}
-("NA"). Use "no" to keep outliers as they are.}
+\item{replace}{Should outliers be replaced via predictive mean matching "pmm"
+(default), by "predictions", or by \code{NA} ("NA").
+Use "no" to keep outliers as they are.}
 
-\item{pmm.k}{For \code{replace = "pmm"}, how many nearest prediction neighbours
-(without outliers) be considered to sample observed values from?}
+\item{pmm.k}{For \code{replace = "pmm"}, from how many nearest OOB prediction neighbours
+(from the original non-outliers) to sample?}
 
 \item{threshold}{Threshold above which an outlier score is considered an outlier.
 The default is 3.}
@@ -47,44 +47,44 @@ Will be used in combination with \code{threshold} and \code{max_n_outliers}.}
 \item{min.node.size}{Minimal node size of the random forests.
 With 40, the value is relatively high. This reduces the impact of outliers.}
 
-\item{allow_predictions}{Should the resulting outForest be used on new data?
-Default is \code{FALSE} as fitted random forests can be huge.}
+\item{allow_predictions}{Should the resulting "outForest" object be applied to
+new data? Default is \code{FALSE}.}
 
 \item{impute_multivariate}{If \code{TRUE} (default), missing values are imputed
-by \code{missRanger::missRanger()}. Otherwise, by univariate sampling.}
+by \code{\link[missRanger:missRanger]{missRanger::missRanger()}}. Otherwise, by univariate sampling.}
 
-\item{impute_multivariate_control}{Parameters passed to \code{missRanger::missRanger}
-if data contains missing values.}
+\item{impute_multivariate_control}{Parameters passed to \code{\link[missRanger:missRanger]{missRanger::missRanger()}}
+(only if data contains missing values).}
 
 \item{seed}{Integer random seed.}
 
 \item{verbose}{Controls how much outliers is printed to screen.
 0 to print nothing, 1 prints information.}
 
-\item{...}{Arguments passed to \code{ranger}. If the data set is large, use
+\item{...}{Arguments passed to \code{\link[ranger:ranger]{ranger::ranger()}}. If the data set is large, use
 less trees (e.g. \code{num.trees = 20}) and/or a low value of \code{mtry}.}
 }
 \value{
-An object of type 'outForest' and a list with the following elements.
+An object of class "outForest" and a list with the following elements.
 \itemize{
 \item \code{Data}: Original data set in unchanged row order but optionally with
-outliers replaced. Can be extracted with the \code{Data} function.
-\item \code{outliers}: Compact representation of outliers, for details see the
-\code{outliers} function used to extract them.
+outliers replaced. Can be extracted with the \code{\link[=Data]{Data()}} function.
+\item \code{outliers}: Compact representation of outliers, for details see the \code{\link[=outliers]{outliers()}}
+function used to extract them.
 \item \code{n_outliers}: Number of outliers per \code{v}.
 \item \code{is_outlier}: Logical matrix with outlier status.
-NULL if \code{allow_predictions = FALSE}.
+\code{NULL} if \code{allow_predictions = FALSE}.
 \item \code{predData}: \code{data.frame} with OOB predictions.
-NULL if \code{allow_predictions = FALSE}.
+\code{NULL} if \code{allow_predictions = FALSE}.
 \item \code{allow_predictions}: Same as \code{allow_predictions}.
 \item \code{v}: Variables checked.
 \item \code{threshold}: The threshold used.
-\item \code{rmse}: Named vector of RMSE of the random forests.
-Used for scaling the difference between observed values and predicted.
+\item \code{rmse}: Named vector of RMSEs of the random forests. Used for scaling the
+difference between observed values and predicted.
 \item \code{forests}: Named list of fitted random forests.
-NULL if \code{allow_predictions = FALSE}.
+\code{NULL} if \code{allow_predictions = FALSE}.
 \item \code{used_to_check}: Variables used for checking \code{v}.
-\item \code{mu}: Named vector of sample means of the original v (incl. outliers).
+\item \code{mu}: Named vector of sample means of the original \code{v} (incl. outliers).
 }
 }
 \description{
@@ -94,28 +94,32 @@ Each numeric variable to be checked for outliers is regressed onto all other
 variables using a random forest. If the scaled absolute difference between observed
 value and out-of-bag prediction is larger than some predefined threshold
 (default is 3), then a value is considered an outlier, see Details below.
-After identification of outliers, they can be replaced e.g. by
+After identification of outliers, they can be replaced, e.g., by
 predictive mean matching from the non-outliers.
-Since the random forest algorithm 'ranger' does not allow for missing values,
-any missing value is first being imputed by chained random forests.
-The method can be viewed as a multivariate extension of a basic univariate outlier
-detection method where a value is considered an outlier if it is more than e.g.
-three times the standard deviation away from its mean. In the multivariate case,
-instead of comparing a value with the overall mean, rather the difference to the
-conditional mean is considered. The 'outForest()' function estimates this conditional
-mean by a random forest. If the method is trained on a reference data with option
-\code{allow_predictions}, it can be applied to new data.
 }
 \details{
-The outlier score of the i-th value x_ij of the j-th variable is defined as
-s_ij = (x_ij - pred_ij) / rmse_j, where pred_ij is the corresponding out-of-bag
-prediction of the j-th random forest and rmse_j its RMSE. If |s_ij| > L with
-threshold L, then x_ij is considered an outlier.
+The method can be viewed as a multivariate extension of a basic univariate outlier
+detection method where a value is considered an outlier if it is more than, e.g.,
+three times the standard deviation away from its mean. In the multivariate case,
+instead of comparing a value with the overall mean, rather the difference to the
+conditional mean is considered. \code{outForest()} estimates this conditional
+mean by a random forest. If the method is trained on a reference data with option
+\code{allow_predictions = TRUE}, it can even be applied to new data.
+
+The outlier score of the ith value \eqn{x_{ij}} of the jth variable is defined as
+\eqn{s_{ij} = (x_{ij} - p_{ij}) / \textrm{rmse}_j}, where \eqn{p_{ij}}
+is the corresponding out-of-bag prediction of the jth random forest and
+\eqn{\textrm{rmse}_j} its RMSE. If \eqn{|s_{ij}| > L} with
+threshold \eqn{L}, then \eqn{x_{ij}} is considered an outlier.
+
 For large data sets, just by chance, many values can surpass the default threshold
 of 3. To reduce the number of outliers, the threshold can be increased.
 Alternatively, the number of outliers can be limited by the two arguments
-\code{max_n_outliers} and \code{max_prop_outliers}. E.g. if at most ten outliers
+\code{max_n_outliers} and \code{max_prop_outliers}. For instance, if at most ten outliers
 are to be identified, set \code{max_n_outliers = 10}.
+
+Since the random forest algorithm "ranger" does not allow for missing values,
+any missing value is first being imputed by chained random forests.
 }
 \examples{
 head(irisWithOut <- generateOutliers(iris, seed = 345))
@@ -127,11 +131,14 @@ plot(out, what = "scores")
 }
 \references{
 \enumerate{
-\item Chandola V., Banerjee A., and Kumar V. (2009). Anomaly detection: A survey. ACM Comput. Surv. 41, 3, Article 15 <dx.doi.org/10.1145/1541880.1541882>.
-\item Wright, M. N. & Ziegler, A. (2016). ranger: A Fast Implementation of Random Forests for High Dimensional Data in C++ and R. Journal of Statistical Software, in press. <arxiv.org/abs/1508.04409>.
+\item Chandola V., Banerjee A., and Kumar V. (2009). Anomaly detection: A survey.
+ACM Comput. Surv. 41, 3, Article 15 <dx.doi.org/10.1145/1541880.1541882>.
+\item Wright, M. N. & Ziegler, A. (2016). ranger: A Fast Implementation of Random
+Forests for High Dimensional Data in C++ and R. Journal of Statistical Software,
+in press. <arxiv.org/abs/1508.04409>.
 }
 }
 \seealso{
-\code{\link{outliers}}, \code{\link{Data}}, \code{\link{plot.outForest}},
-\code{\link{summary.outForest}}, \code{\link{predict.outForest}}.
+\code{\link[=outliers]{outliers()}}, \code{\link[=Data]{Data()}} \code{\link[=plot.outForest]{plot.outForest()}}, \code{\link[=summary.outForest]{summary.outForest()}},
+\code{\link[=predict.outForest]{predict.outForest()}}
 }

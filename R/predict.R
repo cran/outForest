@@ -1,19 +1,14 @@
 #' Out-of-Sample Application
 #'
-#' Identify outliers in new data set based on previously fitted "outForest" object.
-#' The result of \code{predict} is again an object of type "outForest".
+#' Identifies outliers in new data based on previously fitted "outForest" object.
+#' The result of `predict()` is again an object of class "outForest".
 #' All its methods can be applied to it.
 #'
 #' @param object An object of class "outForest".
-#' @param newdata A new \code{data.frame} to be assessed for numeric outliers.
-#' @param replace Should outliers be replaced by predicting mean matching (from the original non-outliers) on the predictions ("pmm", the default), by predictions ("predictions"), by \code{NA} ("NA"). Use "no" to keep outliers as they are.
-#' @param pmm.k For \code{replace = "pmm"}, how many nearest prediction neighbours (from the original non-outliers) be considered to sample observed values from?
-#' @param threshold Threshold above which an outlier score is considered an outlier.
-#' @param max_n_outliers Maximal number of outliers to identify. Will be used in combination with \code{threshold} and \code{max_prop_outliers}.
-#' @param max_prop_outliers Maximal relative count of outliers. Will be used in combination with \code{threshold} and \code{max_n_outliers}.
-#' @param seed Integer random seed.
+#' @param newdata A new `data.frame` to be assessed for numeric outliers.
+#' @inheritParams outForest
 #' @param ... Further arguments passed from other methods.
-#' @return An object of type \code{outForest}.
+#' @returns An object of class "outForest".
 #' @export
 #' @examples
 #' (out <- outForest(iris, allow_predictions = TRUE))
@@ -24,10 +19,10 @@
 #' Data(pred)
 #' plot(pred)
 #' plot(pred, what = "scores")
-#' @seealso \code{\link{outForest}}, \code{\link{outliers}}, \code{\link{Data}}.
+#' @seealso [outForest()], [outliers()], [Data()]
 predict.outForest <- function(object, newdata,
                               replace = c("pmm", "predictions", "NA", "no"),
-                              pmm.k = 3, threshold = object$threshold,
+                              pmm.k = 3L, threshold = object$threshold,
                               max_n_outliers = Inf,
                               max_prop_outliers = 1, seed = NULL, ...) {
   replace <- match.arg(replace)
@@ -95,7 +90,3 @@ predict.outForest <- function(object, newdata,
   class(out) <- c("outForest", "list")
   out
 }
-
-
-
-
